@@ -11,14 +11,19 @@ class KPC:
         self.override_signal = override_signal
 
     def reset_passcode_entry(self):
+        pass
 
     def get_next_signal(self):
+        pass
 
     def verify_login(self):
+        pass
 
     def validate_passcode_change(self):
+        pass
 
     def light_one_led(self):
+        pass
 
     def flash_leds(self):
         self.led_board.flash_all_leds()
@@ -27,4 +32,4 @@ class KPC:
         self.led_board.twinkle_all_leds()
 
     def exit_action(self):
-        self.led_board.
+        pass
