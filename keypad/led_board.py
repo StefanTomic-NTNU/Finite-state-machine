@@ -4,6 +4,7 @@
 class LED_board:
 
     def light_led(self):
+        
         pass
 
     def flash_all_leds(self):
