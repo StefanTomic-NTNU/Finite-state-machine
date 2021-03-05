@@ -5,7 +5,7 @@ from src.keypad import Keypad
 
 
 def main():
-    kpc = KPC("tull")
+    kpc = KPC("password.txt")
     kpc.do_polling()
 
 
