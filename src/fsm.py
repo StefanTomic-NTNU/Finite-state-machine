@@ -8,10 +8,10 @@ class FSM:
         self.rules = []
         self.add_rule(State.S_Init, "all_signals", State.S_Read_1, master_kpc.reset_passcode_entry)
         self.add_rule(State.S_Read_1, "all_digits", State.S_Read_1, master_kpc.append_next_password_digit)
-        self.add_rule(State.S_Read_1, "*", State.S_Verify, master_kpc.verify_password)
+        self.add_rule(State.S_Read_1, "u", State.S_Verify, master_kpc.verify_password)
         self.add_rule(State.S_Read_1, "all_signals", State.S_Init, master_kpc.reset_agent)
         self.add_rule(State.S_Verify, "Y", State.S_Active, master_kpc.fully_activate_agent)
-        self.add_rule(State.S_Verify, "all_signals", State.S_Active, master_kpc.reset_agent)
+        self.add_rule(State.S_Verify, "all_signals", State.S_Init, master_kpc.reset_agent)
         self.state = State.S_Init
         self.signal = None
         self.master_kpc = master_kpc
@@ -34,7 +34,7 @@ class FSM:
         pass
     
     def fire(self, rule):
-        print(f"{rule.s1} --> {rule.s2}")
+        # print(f"{rule.s1} --> {rule.s2}")
         rule.perform_action()
         self.state = rule.s2
     

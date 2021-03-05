@@ -11,11 +11,11 @@ class Rule:
 
     # takes in a signal returns true if the self.signal is equal to the signal
     def verify_signal(self, signal):
-        if self.signal == "signal_is_digit" and signal_is_digit(signal):
+        if self.signal == "all_digits" and signal_is_digit(signal):
             return True
         elif self.signal == "all_signals":
             return True
-        elif self.signal == "*" and signal_is_star(signal):
+        elif self.signal == "u" and signal_is_star(signal):
             return True
         elif self.signal == "Y" and signal_is_Y(signal):
             return True
