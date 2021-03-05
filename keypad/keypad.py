@@ -16,14 +16,14 @@ class Keypad:
         self.key = key.char
 
     def setup(self):
-        self.GPIO.setup(GPIO.PIN_KEYPAD_ROW_0, GPIO.OUT)
-        self.GPIO.setup(GPIO.PIN_KEYPAD_ROW_1, GPIO.OUT)
-        self.GPIO.setup(GPIO.PIN_KEYPAD_ROW_2, GPIO.OUT)
-        self.GPIO.setup(GPIO.PIN_KEYPAD_ROW_3, GPIO.OUT)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_ROW_0, self.GPIO.OUT)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_ROW_1, self.GPIO.OUT)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_ROW_2, self.GPIO.OUT)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_ROW_3, self.GPIO.OUT)
         
-        self.GPIO.setup(GPIO.PIN_KEYPAD_COL_0, GPIO.IN, state=GPIO.LOW)
-        self.GPIO.setup(GPIO.PIN_KEYPAD_COL_1, GPIO.IN, state=GPIO.LOW)
-        self.GPIO.setup(GPIO.PIN_KEYPAD_COL_2, GPIO.IN, state=GPIO.LOW)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_COL_0, self.GPIO.IN, state=self.GPIO.LOW)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_COL_1, self.GPIO.IN, state=self.GPIO.LOW)
+        self.GPIO.setup(self.GPIO.PIN_KEYPAD_COL_2, self.GPIO.IN, state=self.GPIO.LOW)
     
     def do_polling(self):
         condition = False
@@ -37,9 +37,11 @@ class Keypad:
     def get_next_signal(self):
         pass
 
+
 def main():
     keypad = Keypad()
     keypad.do_polling()
+
 
 if __name__ == "__main__": 
     main()

@@ -1,4 +1,5 @@
-from keypad.Utils import *
+from keypad.utils import *
+
 
 class Rule:
 

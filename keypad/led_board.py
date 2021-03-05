@@ -1,6 +1,3 @@
-
-
-
 class LED_board:
 
     def light_led(self):
