@@ -30,9 +30,9 @@ class Keypad:
         while(not condition):
             with Listener(on_press=self.set_key, on_release=on_release) as listener:
                 listener.join()
-            print(self.key)
-            if self.key == "q":
-                condition = True
+            return self.key
+            # if self.key == "q":
+            #     condition = True
 
     def get_next_signal(self):
         pass

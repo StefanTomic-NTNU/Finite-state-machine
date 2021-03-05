@@ -101,9 +101,9 @@ class GPIOSimulator:
     def __update_keypad_pin_states(self):
         """
         internal function, called by GPIO.input
-        Update the states of the keypad input pins
+        Update the states of the src input pins
         """
-        # reset all keypad pins whose mode is GPIO.IN to GPIO.LOW
+        # reset all src pins whose mode is GPIO.IN to GPIO.LOW
         for pin in keypad_pins:
             if self.__pin_modes[pin] == self.IN:
                 self.__pin_states[pin] = self.LOW
@@ -134,7 +134,7 @@ class GPIOSimulator:
 
     def __on_press(self, key):
         """ The callback function for a key pressing event """
-        # We handle only valid keypad keys, while neglecting all others
+        # We handle only valid src keys, while neglecting all others
         # still allowing Ctrl+C to quit
         if hasattr(key, 'char') and key.char in self.__valid_keys:
             # reset the key states
