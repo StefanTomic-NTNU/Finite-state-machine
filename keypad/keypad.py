@@ -12,18 +12,18 @@ class Keypad:
         self.GPIO = GPIOSimulator()
         self.key = ''
 
-        self.key_coord = {'1' (3, 7),
-                            '2' (3, 8),
-                            '3' (3, 9),
-                            '4' (4, 7),
-                            '5' (4, 8),
-                            '6' (4, 9),
-                            '7' (5, 7),
-                            '8' (5, 8),
-                            '9' (5, 9),
-                            '' (6, 7),
-                            '0' (6, 8),
-                            '#' (6, 9)}
+        self.key_coord = {'1': (3, 7),
+                            '2': (3, 8),
+                            '3': (3, 9),
+                            '4': (4, 7),
+                            '5': (4, 8),
+                            '6': (4, 9),
+                            '7': (5, 7),
+                            '8': (5, 8),
+                            '9': (5, 9),
+                            '*': (6, 7),
+                            '0': (6, 8),
+                            '#': (6, 9)}
         
         self.PIN_KEYPAD_ROW_0 = 3
         self.PIN_KEYPAD_ROW_1 = 4
@@ -50,27 +50,25 @@ class Keypad:
 
     def do_polling(self):
         condition = False
-        while(not condition):
-            with Listener(on_press=self.set_key, on_release=on_release) as listener:
-                listener.join()
-            if(ord(self.key) == 39): # if press ' then we get  because we don't have a numpad
-                self.key = ''
-            elif(ord(self.key) == 43): # if press + then we get # because we don't have a numpad
-                self.key = '#'
-            coordinates = self.key_coord[self.key]
-            row = coordinates[0]
-            column = coordinates[1]
-            self.GPIO.output(row, self.GPIO.HIGH)
-            print(self.GPIO.input(column) == self.GPIO.HIGH)
-
-
-
-            print(self.key)
-            return self.key
-            
-            
-            # if self.key == q
-            #     condition = True
+        try:
+            while(not condition):
+                time.sleep(1)
+                self.setup()
+                self.test()
+        except KeyboardInterrupt:
+                print("quitting...")
+                condition = True
+            #with Listener(on_press=self.set_key, on_release=on_release) as listener:
+            #    listener.join()
+            #if(ord(self.key) == 39): # if press ' then we get  because we don't have a numpad
+            #    self.key = ''
+            #elif(ord(self.key) == 43): # if press + then we get # because we don't have a numpad
+            #    self.key = '#'
+            #coordinates = self.key_coord[self.key]
+            #row = coordinates[0]
+            #column = coordinates[1]
+            #self.GPIO.output(row, self.GPIO.HIGH)
+            #print(self.GPIO.input(column) == self.GPIO.HIGH)
 
     def get_next_signal(self):
         signal = self.do_polling()
@@ -78,7 +76,6 @@ class Keypad:
 
 def main():
     keypad = Keypad()
-    keypad.setup()
     keypad.do_polling()
 
 
