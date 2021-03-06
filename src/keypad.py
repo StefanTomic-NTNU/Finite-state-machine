@@ -1,4 +1,4 @@
-import GPIOSimulator_v5 as GPIOSimulator_v5
+import GPIOSimulator_v5 as GPIOSimulator
 from pynput.keyboard import Listener, Key
 import time
 
@@ -6,10 +6,11 @@ import time
 def on_release(key):
     return False
 
+
 class Keypad:
     
-    def __init__(self):
-        self.GPIO = GPIOSimulator_v5.GPIOSimulator
+    def __init__(self, GPIO):
+        self.GPIO = GPIO
         self.key = ""
     
     def set_key(self, key):
