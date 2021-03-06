@@ -2,8 +2,11 @@ def signal_is_digit(signal):
     return 48 <= ord(signal) <= 57
 
 
+# def signal_is_star(signal):
+#     return ord(signal) == 42
 def signal_is_star(signal):
-    return ord(signal) == 42
+    # Sjekker om bokstaven er en u
+    return ord(signal) == 117
 
 
 def signal_is_Y(signal):
