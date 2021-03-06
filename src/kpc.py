@@ -1,9 +1,8 @@
 """ File contains the KPC class """
 import GPIOSimulator_v5 as GPIOSimulator
 from fsm import FSM
-from src.charlieplexer import Charlieplexer
-from src.keypad import Keypad
-from src.led_board import LED_board
+from keypad import Keypad
+from led_board import LED_board
 
 
 class KPC:
@@ -21,7 +20,7 @@ class KPC:
         self.led_board = LED_board(self.GPIO)
         self.pathname = pathname
         self.override_signal = None
-        # self.current_password = "1234"
+        self.current_password = "1234"
         self.read_password_from_file()
         self.cumulative_password = ""
         self.old_cumulative_password = ""
@@ -90,9 +89,6 @@ class KPC:
         with open(self.pathname) as file:
             self.current_password = file.read()
 
-    # def verify_login(self):
-    #     pass
-
     def validate_password_change(self):
         """
         Checks if the passwords that the user has input
@@ -103,6 +99,10 @@ class KPC:
             self.write_password_to_file()
             self.cumulative_password = ""
             self.old_cumulative_password = ""
+            self.read_password_from_file()
+            self.twinkle_leds()
+        else:
+            self.flash_leds()
 
     def light_one_led(self, led_nr, sec):
         self.led_board.light_led_for_time(led_nr, sec)

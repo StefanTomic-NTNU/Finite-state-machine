@@ -1,5 +1,4 @@
 import GPIOSimulator_v5 as GPIOsim
-from pynput.keyboard import Listener, Key
 from datetime import datetime, timedelta
 import time
 

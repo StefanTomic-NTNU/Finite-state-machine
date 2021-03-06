@@ -1,7 +1,4 @@
-from keypad import Keypad
-from fsm import FSM
 from kpc import KPC
-from keypad import Keypad
 
 
 def main():

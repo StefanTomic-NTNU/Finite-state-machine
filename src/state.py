@@ -11,3 +11,4 @@ class State(enum.Enum):
     S_Read_3 = 6
     S_LED = 7
     S_Time = 8
+    S_Logout = 9
