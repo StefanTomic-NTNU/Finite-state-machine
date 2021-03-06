@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 import time
 
 
+#TODO implement CTRL + C somewhere and clear all the leds etc.... 
+
 def on_release(key):
     return False
 
@@ -11,6 +13,7 @@ def on_release(key):
 class Keypad:
     def __init__(self, GPIO):
         self.GPIO = GPIO
+        self.key = ''
 
         self.inv_key_coord = {
             '(3, 7)': '1',
@@ -52,12 +55,13 @@ class Keypad:
                 self.GPIO.output(row, self.GPIO.HIGH)
                 for col in GPIOsim.keypad_col_pins:
                     if self.GPIO.input(col) == self.GPIO.HIGH:
-                        return self.inv_key_coord[str((row, col))]
+                        self.key = self.inv_key_coord[str((row, col))]
+                        if(ord(self.key) == 39): # if press ' then we get * because we don't have a numpad
+                            self.key = ''
+                        elif(ord(self.key) == 43): # if press + then we get # because we don't have a numpad
+                            self.key = '#'
+                        return self.key
         return "N"
-            # time.sleep(0.01)
-            # if pressed_key is not None:
-            #     self.set_all_rows_to_low()
-            #     return pressed_key
 
     def set_all_rows_to_low(self):
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_0, self.GPIO.LOW)
@@ -65,10 +69,7 @@ class Keypad:
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_2, self.GPIO.LOW)
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_3, self.GPIO.LOW)
 
-    # def get_next_signal(self):
-    #     signal = self.do_polling()
-
-    def poll(self):
+    def get_next_signal(self):
         input_stream = ""
         while len(input_stream) < 2 or input_stream[0] == input_stream [-1]:
             last_letter = self.do_polling()

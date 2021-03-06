@@ -35,7 +35,7 @@ class KPC:
         """
         while True:
             if self.override_signal is None:
-                self.fsm.signal = self.keypad.poll()
+                self.fsm.signal = self.keypad.get_next_signal()
             else:
                 self.fsm.signal = self.override_signal
             self.fsm.check_all_rules()
