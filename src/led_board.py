@@ -22,6 +22,11 @@ class LED_board:
             fire_led[str(led_nr)]()
             self.GPIO.show_leds_states()
 
+    def light_led_for_time(self, led_nr, sec):
+        self.light_led(led_nr)
+        time.sleep(sec)
+        self.disable_all_leds()
+
     def flash_all_leds_once(self):
         self.fire_leds_for_seconds((0, 1, 2, 3, 4, 5), 1)
         self.disable_all_leds_for_seconds(0.2)

@@ -19,13 +19,14 @@ class KPC:
         self.GPIO = GPIOSimulator.GPIOSimulator()
         self.keypad = Keypad(self.GPIO)
         self.led_board = LED_board(self.GPIO)
-
         self.pathname = pathname
         self.override_signal = None
         # self.current_password = "1234"
         self.read_password_from_file()
         self.cumulative_password = ""
         self.old_cumulative_password = ""
+        self.chosen_led = None
+        self.chosen_time = ""
 
     def do_polling(self):
         """
@@ -103,8 +104,8 @@ class KPC:
             self.cumulative_password = ""
             self.old_cumulative_password = ""
 
-    def light_one_led(self, led_nr):
-        self.led_board.light_led(led_nr)
+    def light_one_led(self, led_nr, sec):
+        self.led_board.light_led_for_time(led_nr, sec)
 
     def flash_leds(self):
         self.led_board.flash_all_leds_multiple_times(3)
@@ -117,6 +118,24 @@ class KPC:
 
     def power_down_animation(self):
         self.led_board.twinkle_leds_from_edges()
+
+    def choose_led(self):
+        self.chosen_led = self.fsm.signal
+
+    def choose_time(self):
+        pass
+
+    def add_letter_to_time(self):
+        self.chosen_time += str(self.fsm.signal)
+
+    def activate_led(self):
+        self.light_one_led(self.chosen_led, int(self.chosen_time))
+
+    def reset_led(self):
+        self.chosen_led = None
+
+    def reset_time(self):
+        self.chosen_time = None
 
     def exit_action(self):
         pass
