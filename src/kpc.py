@@ -1,7 +1,7 @@
 """ File contains the KPC class """
 from fsm import FSM
-from src.keypad import Keypad
-from src.led_board import LED_board
+from keypad import Keypad
+from led_board import LED_board
 
 
 class KPC:

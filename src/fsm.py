@@ -1,6 +1,6 @@
 """ File contains the FSM class """
-from src.rule import Rule
-from src.state import State
+from rule import Rule
+from state import State
 
 
 class FSM:

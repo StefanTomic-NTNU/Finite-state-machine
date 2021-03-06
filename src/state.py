@@ -1,5 +1,5 @@
 import enum
-from src import utils
+import utils
 
 
 class State(enum.Enum):
