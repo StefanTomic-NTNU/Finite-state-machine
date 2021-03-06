@@ -18,4 +18,4 @@ def signal_is_hashtag(signal):
 
 
 def signal_is_digit_0_to_5(signal):
-    return 48 <= ord(signal) <= 54
+    return 48 <= ord(signal) <= 53

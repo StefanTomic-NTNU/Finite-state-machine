@@ -1,5 +1,7 @@
 """ File contains the KPC class """
+import GPIOSimulator_v5 as GPIOSimulator
 from fsm import FSM
+from src.charlieplexer import Charlieplexer
 from src.keypad import Keypad
 from src.led_board import LED_board
 
@@ -13,9 +15,11 @@ class KPC:
     """
 
     def __init__(self, pathname):
-        self.keypad = Keypad()
         self.fsm = FSM(self)
-        self.led_board = LED_board()
+        self.GPIO = GPIOSimulator.GPIOSimulator()
+        self.keypad = Keypad(self.GPIO)
+        self.led_board = LED_board(self.GPIO)
+
         self.pathname = pathname
         self.override_signal = None
         # self.current_password = "1234"
@@ -34,6 +38,7 @@ class KPC:
             else:
                 self.fsm.signal = self.override_signal
             self.fsm.check_all_rules()
+            self.light_one_led(self.fsm.signal)
             print(self.fsm.state)
 
     def reset_passcode_entry(self):
@@ -92,8 +97,8 @@ class KPC:
             self.cumulative_password = ""
             self.old_cumulative_password = ""
 
-    def light_one_led(self):
-        pass
+    def light_one_led(self, led_nr):
+        self.led_board.light_led(led_nr)
 
     def flash_leds(self):
         self.led_board.flash_all_leds()
