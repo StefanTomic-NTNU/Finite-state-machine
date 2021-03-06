@@ -38,7 +38,6 @@ class KPC:
             else:
                 self.fsm.signal = self.override_signal
             self.fsm.check_all_rules()
-            self.light_one_led(self.fsm.signal)
             print(self.fsm.state)
 
     def reset_passcode_entry(self):
@@ -51,8 +50,10 @@ class KPC:
     def verify_password(self):
         if self.current_password == self.cumulative_password:
             self.override_signal = "Y"
+            self.twinkle_leds()
         else:
             self.override_signal = "0"
+            self.flash_leds()
 
     def reset_agent(self):
         self.cumulative_password = ""
@@ -101,10 +102,16 @@ class KPC:
         self.led_board.light_led(led_nr)
 
     def flash_leds(self):
-        self.led_board.flash_all_leds()
+        self.led_board.flash_all_leds_multiple_times(3)
 
     def twinkle_leds(self):
         self.led_board.twinkle_all_leds()
+
+    # def power_up_animation(self):
+    #     self.led_board.twinkle_all_leds()
+    #
+    # def power_down_animation(self):
+    #     self.led_board.twinkle_all_leds()
 
     def exit_action(self):
         pass

@@ -7,6 +7,11 @@ class Charlieplexer:
     def __init__(self, GPIO):
         self.GPIO = GPIO
 
+    def disable(self):
+        self.GPIO.setup(GPIOSimulator.PIN_CHARLIEPLEXING_0, self.GPIO.IN)
+        self.GPIO.setup(GPIOSimulator.PIN_CHARLIEPLEXING_1, self.GPIO.IN)
+        self.GPIO.setup(GPIOSimulator.PIN_CHARLIEPLEXING_2, self.GPIO.IN)
+
     def fire_led_0(self):
         self.GPIO.setup(GPIOSimulator.PIN_CHARLIEPLEXING_0, self.GPIO.OUT, state=self.GPIO.HIGH)
         self.GPIO.setup(GPIOSimulator.PIN_CHARLIEPLEXING_1, self.GPIO.OUT, state=self.GPIO.LOW)
