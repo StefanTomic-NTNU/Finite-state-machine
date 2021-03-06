@@ -16,7 +16,7 @@ class FSM:
         self.rules = []
 
         # example from text, table end of page 9
-        self.add_rule(State.S_Init, "all_signals", State.S_Read_1, master_kpc.reset_passcode_entry)
+        self.add_rule(State.S_Init, "all_signals", State.S_Read_1, master_kpc.reset_init_passcode_entry)
 
         self.add_rule(State.S_Read_1, "all_digits", State.S_Read_1, master_kpc.append_next_password_digit)
         self.add_rule(State.S_Read_1, "u", State.S_Verify, master_kpc.verify_password)

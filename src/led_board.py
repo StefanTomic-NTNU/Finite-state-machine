@@ -34,13 +34,13 @@ class LED_board:
             else:
                 # This minimizes the time the user cannot interact with the Keypad
                 # Yet it makes sure all leds are disabled by the end of the flashing
-                self.disable_all_leds_for_seconds(0.01)
+                self.disable_all_leds()
 
     def twinkle_all_leds(self):
         for i in range(6):
             self.light_led(i)
             time.sleep(0.5)
-        self.disable_all_leds_for_seconds(0.001)
+        self.disable_all_leds()
 
     def fire_leds_for_seconds(self, leds, sec):
         end_time = datetime.now() + timedelta(seconds=sec)
@@ -48,8 +48,23 @@ class LED_board:
             for led in leds:
                 self.light_led(led)
 
+    def disable_all_leds(self):
+        self.charlieplexer.disable()
+        self.GPIO.show_leds_states()
+
     def disable_all_leds_for_seconds(self, sec):
         end_time = datetime.now() + timedelta(seconds=sec)
         while datetime.now() < end_time:
             self.charlieplexer.disable()
             self.GPIO.show_leds_states()
+
+    def twinkle_leds_from_centre(self):
+        self.twinkle_led_combinations(((2, 3), (1, 4), (0, 5)))
+
+    def twinkle_leds_from_edges(self):
+        self.twinkle_led_combinations(((0, 5), (1, 4), (2, 3)))
+
+    def twinkle_led_combinations(self, combinations):
+        for combination in combinations:
+            self.fire_leds_for_seconds(combination, 0.5)
+        self.disable_all_leds()
