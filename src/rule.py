@@ -15,7 +15,7 @@ class Rule:
             return True
         elif self.signal == "all_signals":
             return True
-        elif self.signal == "u" and signal_is_star(signal):
+        elif self.signal == "*" and signal_is_star(signal):
             return True
         elif self.signal == "Y" and signal_is_Y(signal):
             return True

@@ -4,28 +4,13 @@ from datetime import datetime, timedelta
 import time
 
 
-    
 def on_release(key):
     return False
 
-class Keypad:
-    
-    def __init__(self):
-        self.GPIO = GPIOsim.GPIOSimulator()
-        self.key = ''
 
-        # self.key_coord = {'1': (3, 7),
-        #                     '2': (3, 8),
-        #                     '3': (3, 9),
-        #                     '4': (4, 7),
-        #                     '5': (4, 8),
-        #                     '6': (4, 9),
-        #                     '7': (5, 7),
-        #                     '8': (5, 8),
-        #                     '9': (5, 9),
-        #                     '*': (6, 7),
-        #                     '0': (6, 8),
-        #                     '#': (6, 9)}
+class Keypad:
+    def __init__(self, GPIO):
+        self.GPIO = GPIO
 
         self.inv_key_coord = {
             '(3, 7)': '1',
@@ -56,31 +41,8 @@ class Keypad:
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_0, self.GPIO.IN, state=self.GPIO.LOW)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_1, self.GPIO.IN, state=self.GPIO.LOW)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_2, self.GPIO.IN, state=self.GPIO.LOW)
-    
 
-    # def do_polling(self):
-    #     condition = False
-    #     try:
-    #         while(not condition):
-    #             time.sleep(1)
-    #             self.setup()
-    #             self.test()
-    #     except KeyboardInterrupt:
-    #             print("quitting...")
-    #             condition = True
-            #with Listener(on_press=self.set_key, on_release=on_release) as listener:
-            #    listener.join()
-            #if(ord(self.key) == 39): # if press ' then we get  because we don't have a numpad
-            #    self.key = ''
-            #elif(ord(self.key) == 43): # if press + then we get # because we don't have a numpad
-            #    self.key = '#'
-            #coordinates = self.key_coord[self.key]
-            #row = coordinates[0]
-            #column = coordinates[1]
-            #self.GPIO.output(row, self.GPIO.HIGH)
-            #print(self.GPIO.input(column) == self.GPIO.HIGH)
-
-    def do_polling_v2(self):
+    def do_polling(self):
         # pressed_key = None
         end_time = datetime.now() + timedelta(seconds=0.1)
         while datetime.now() < end_time:
@@ -109,19 +71,9 @@ class Keypad:
     def poll(self):
         input_stream = ""
         while len(input_stream) < 2 or input_stream[0] == input_stream [-1]:
-            last_letter = self.do_polling_v2()
+            last_letter = self.do_polling()
             if last_letter != "N":
                 input_stream += last_letter
             if last_letter == "N" and len(input_stream) > 0:
                 break
         return input_stream[0]
-
-
-def main():
-    keypad = Keypad()
-    keypad.setup()
-    keypad.poll()
-
-
-if __name__ == "__main__":
-    main()

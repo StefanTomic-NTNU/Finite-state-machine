@@ -9,3 +9,5 @@ class State(enum.Enum):
     S_Active = 4
     S_Read_2 = 5
     S_Read_3 = 6
+    S_LED = 7
+    S_Time = 8

@@ -1,5 +1,7 @@
 """ File contains the KPC class """
+import GPIOSimulator_v5 as GPIOSimulator
 from fsm import FSM
+from src.charlieplexer import Charlieplexer
 from src.keypad import Keypad
 from src.led_board import LED_board
 
@@ -13,15 +15,18 @@ class KPC:
     """
 
     def __init__(self, pathname):
-        self.keypad = Keypad()
         self.fsm = FSM(self)
-        self.led_board = LED_board()
+        self.GPIO = GPIOSimulator.GPIOSimulator()
+        self.keypad = Keypad(self.GPIO)
+        self.led_board = LED_board(self.GPIO)
         self.pathname = pathname
         self.override_signal = None
         # self.current_password = "1234"
         self.read_password_from_file()
         self.cumulative_password = ""
         self.old_cumulative_password = ""
+        self.chosen_led = None
+        self.chosen_time = ""
 
     def do_polling(self):
         """
@@ -36,6 +41,10 @@ class KPC:
             self.fsm.check_all_rules()
             print(self.fsm.state)
 
+    def reset_init_passcode_entry(self):
+        self.cumulative_password = ""
+        self.power_up_animation()
+
     def reset_passcode_entry(self):
         self.cumulative_password = ""
 
@@ -46,12 +55,15 @@ class KPC:
     def verify_password(self):
         if self.current_password == self.cumulative_password:
             self.override_signal = "Y"
+            self.twinkle_leds()
         else:
             self.override_signal = "0"
+            self.flash_leds()
 
     def reset_agent(self):
         self.cumulative_password = ""
         self.override_signal = None
+        self.power_down_animation()
 
     def fully_activate_agent(self):
         self.override_signal = None
@@ -92,14 +104,38 @@ class KPC:
             self.cumulative_password = ""
             self.old_cumulative_password = ""
 
-    def light_one_led(self):
-        pass
+    def light_one_led(self, led_nr, sec):
+        self.led_board.light_led_for_time(led_nr, sec)
 
     def flash_leds(self):
-        self.led_board.flash_all_leds()
+        self.led_board.flash_all_leds_multiple_times(3)
 
     def twinkle_leds(self):
         self.led_board.twinkle_all_leds()
+
+    def power_up_animation(self):
+        self.led_board.twinkle_leds_from_centre()
+
+    def power_down_animation(self):
+        self.led_board.twinkle_leds_from_edges()
+
+    def choose_led(self):
+        self.chosen_led = self.fsm.signal
+
+    def choose_time(self):
+        pass
+
+    def add_letter_to_time(self):
+        self.chosen_time += str(self.fsm.signal)
+
+    def activate_led(self):
+        self.light_one_led(self.chosen_led, int(self.chosen_time))
+
+    def reset_led(self):
+        self.chosen_led = None
+
+    def reset_time(self):
+        self.chosen_time = None
 
     def exit_action(self):
         pass
