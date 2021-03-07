@@ -1,7 +1,9 @@
+""" Main file in the Keypad project """
 from kpc import KPC
 
 
 def main():
+    """ Main method to run the Keypad project """
     kpc = KPC("password.txt")
     kpc.do_polling()
 
