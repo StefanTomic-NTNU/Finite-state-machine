@@ -1,10 +1,9 @@
-from src.keypad import Keypad
-from src.fsm import FSM
-from src.kpc import KPC
-from src.keypad import Keypad
+""" Main file in the Keypad project """
+from kpc import KPC
 
 
 def main():
+    """ Main method to run the Keypad project """
     kpc = KPC("password.txt")
     kpc.do_polling()
 
