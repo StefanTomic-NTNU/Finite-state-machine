@@ -1,18 +1,16 @@
+""" Contains Keypad class """
 import GPIOSimulator_v5 as GPIOsim
 from datetime import datetime, timedelta
 import time
 
 
-#TODO implement CTRL + C somewhere and clear all the leds etc.... 
-
-#def on_release(key):
-#    return False
-
-
 class Keypad:
+    """
+    The Keypad class acts as an interface between
+    the GPIOsimulator and the KPC
+    """
     def __init__(self, GPIO):
         self.GPIO = GPIO
-        self.key = ''
 
         self.inv_key_coord = {
             '(3, 7)': '1',
@@ -29,12 +27,10 @@ class Keypad:
             '(6, 9)': '#'
         }
 
-        self.setup()
-    
-    def set_key(self, key):
-        self.key = key.char
+        self.__setup()
 
-    def setup(self):
+    def __setup(self):
+        """ Sets up all keypad-GPIO pins """
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_ROW_0, self.GPIO.OUT)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_ROW_1, self.GPIO.OUT)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_ROW_2, self.GPIO.OUT)
@@ -45,6 +41,14 @@ class Keypad:
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_2, self.GPIO.IN, state=self.GPIO.LOW)
 
     def do_polling(self):
+        """
+        Polls keypad for input.
+
+        If 100ms has passed without input, a token
+        "N" is passed instead. This is so that the
+        get_next_signal method can determine when
+        the user has finished pressing a button.
+        """
         # pressed_key = None
         end_time = datetime.now() + timedelta(seconds=0.1)
         while datetime.now() < end_time:
@@ -54,23 +58,30 @@ class Keypad:
                 self.GPIO.output(row, self.GPIO.HIGH)
                 for col in GPIOsim.keypad_col_pins:
                     if self.GPIO.input(col) == self.GPIO.HIGH:
-                        self.key = self.inv_key_coord[str((row, col))]
-                        if(ord(self.key) == 39): # if press ' then we get * because we don't have a numpad
-                            self.key = ''
-                        elif(ord(self.key) == 43): # if press + then we get # because we don't have a numpad
-                            self.key = '#'
-                        return self.key
+                        return self.inv_key_coord[str((row, col))]
         return "N"
 
     def set_all_rows_to_low(self):
+        """ Sets all row-pins to LOW """
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_0, self.GPIO.LOW)
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_1, self.GPIO.LOW)
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_2, self.GPIO.LOW)
         self.GPIO.output(GPIOsim.PIN_KEYPAD_ROW_3, self.GPIO.LOW)
 
     def get_next_signal(self):
+        """
+        Retrieves a signal that can be returned to KPC.
+
+        The signal is retrieved from the keypad through
+        polling. The signal is then processed such that
+        repeated polling of a single symbol only results in
+        a single symbol being returned. This needs to be
+        the because if the user presses a button we only
+        want a single signal from that button, without
+        it being repeated for each polling.
+        """
         input_stream = ""
-        while len(input_stream) < 2 or input_stream[0] == input_stream [-1]:
+        while len(input_stream) < 2 or input_stream[0] == input_stream[-1]:
             last_letter = self.do_polling()
             if last_letter != "N":
                 input_stream += last_letter

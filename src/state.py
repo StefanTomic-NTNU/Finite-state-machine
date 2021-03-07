@@ -1,8 +1,9 @@
+""" File containing the State enum """
 import enum
-import utils
 
 
 class State(enum.Enum):
+    """ Enum representing the states in the FSM """
     S_Init = 1
     S_Read_1 = 2
     S_Verify = 3
