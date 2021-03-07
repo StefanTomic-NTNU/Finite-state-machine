@@ -57,13 +57,18 @@ class KPC:
         broken by a keyboard interrupt (Ctrl + C)
         or termination.
         """
-        while True:
-            if self.override_signal is None:
-                self.fsm.signal = self.keypad.get_next_signal()
-            else:
-                self.fsm.signal = self.override_signal
-            self.fsm.check_all_rules()
-            print(self.fsm.state)
+        condition = True
+        try:
+            while condition:
+                if self.override_signal is None:
+                    self.fsm.signal = self.keypad.get_next_signal()
+                else:
+                    self.fsm.signal = self.override_signal
+                self.fsm.check_all_rules()
+                print(self.fsm.state)
+        except KeyboardInterrupt:
+            print("quitting...")
+            condition = False
 
     def reset_init_passcode_entry(self):
         """

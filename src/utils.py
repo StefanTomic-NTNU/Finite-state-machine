@@ -1,5 +1,6 @@
 """ File containing helper methods. Mostly used by Rules """
 
+
 def signal_is_digit(signal):
     """ Checks if the signal is a digit {0-9} """
     return 48 <= ord(signal) <= 57
