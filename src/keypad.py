@@ -1,7 +1,7 @@
 """ Contains Keypad class """
-import GPIOSimulator_v5 as GPIOsim
 from datetime import datetime, timedelta
 import time
+import GPIOSimulator_v5 as GPIOsim
 
 
 class Keypad:
@@ -35,7 +35,7 @@ class Keypad:
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_ROW_1, self.GPIO.OUT)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_ROW_2, self.GPIO.OUT)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_ROW_3, self.GPIO.OUT)
-        
+
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_0, self.GPIO.IN, state=self.GPIO.LOW)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_1, self.GPIO.IN, state=self.GPIO.LOW)
         self.GPIO.setup(GPIOsim.PIN_KEYPAD_COL_2, self.GPIO.IN, state=self.GPIO.LOW)

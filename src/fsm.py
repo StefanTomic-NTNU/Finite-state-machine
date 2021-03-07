@@ -39,29 +39,29 @@ class FSM:
 
         # The active state represents the state of being logged in.
         self.add_rule(State.S_Active, "*", State.S_Read_2, master_kpc.reset_passcode_entry)
-        self.add_rule(State.S_Active, "#", State.S_Logout, master_kpc.fully_activate_agent)
+        self.add_rule(State.S_Active, "#", State.S_Logout, master_kpc.exit_action)
         self.add_rule(State.S_Active, "digit_in_0-5", State.S_LED, master_kpc.choose_led)
 
         # S_Read_2 represents the user trying to change the password.
         self.add_rule(State.S_Read_2, "*", State.S_Read_3, master_kpc.cache_cumulative_password)
-        self.add_rule(State.S_Read_2, "#", State.S_Active, master_kpc.fully_activate_agent)
+        self.add_rule(State.S_Read_2, "#", State.S_Active, master_kpc.exit_action)
         self.add_rule(State.S_Read_2, "all_digits", State.S_Read_2, master_kpc.append_next_password_digit)
         self.add_rule(State.S_Read_2, "all_signals", State.S_Active, master_kpc.fully_activate_agent)
 
         # S_Read_3 requires the user to confirm the password.
         self.add_rule(State.S_Read_3, "*", State.S_Active, master_kpc.validate_password_change)
-        self.add_rule(State.S_Read_3, "#", State.S_Active, master_kpc.fully_activate_agent)
+        self.add_rule(State.S_Read_3, "#", State.S_Active, master_kpc.exit_action)
         self.add_rule(State.S_Read_3, "all_digits", State.S_Read_3, master_kpc.append_next_password_digit)
         self.add_rule(State.S_Read_3, "all_signals", State.S_Active, master_kpc.fully_activate_agent)
 
         # S_LED is a state where the user has specified a LED to be lit
         self.add_rule(State.S_LED, "*", State.S_Time, master_kpc.choose_time)
-        self.add_rule(State.S_LED, "#", State.S_Active, master_kpc.fully_activate_agent)
+        self.add_rule(State.S_LED, "#", State.S_Active, master_kpc.exit_action)
         self.add_rule(State.S_LED, "digit_in_0-5", State.S_LED, master_kpc.choose_led)
 
         # S_Time is the state where the user can define the time for the LED to be lit.
         self.add_rule(State.S_Time, "*", State.S_Active, master_kpc.activate_led)
-        self.add_rule(State.S_Time, "#", State.S_Active, master_kpc.fully_activate_agent)
+        self.add_rule(State.S_Time, "#", State.S_Active, master_kpc.exit_action)
         self.add_rule(State.S_Time, "all_digits", State.S_Time, master_kpc.add_letter_to_time)
 
         # S_Logout is the state where the user may confirm logging out

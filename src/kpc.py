@@ -10,6 +10,8 @@ class KPC:
     The Keypad controller coordinates the
     Keypad, the FSM and the GPIO-Simulator.
     It is the main class of the project.
+    In the assignment it is referred to as
+    the agent.
 
     It polls the Keypad for input. This input
     is stored in the FSM as a signal. Upon
@@ -57,9 +59,9 @@ class KPC:
         broken by a keyboard interrupt (Ctrl + C)
         or termination.
         """
-        condition = True
+        no_interrupt = True
         try:
-            while condition:
+            while no_interrupt:
                 if self.override_signal is None:
                     self.fsm.signal = self.keypad.get_next_signal()
                 else:
@@ -68,7 +70,7 @@ class KPC:
                 print(self.fsm.state)
         except KeyboardInterrupt:
             print("quitting...")
-            condition = False
+            no_interrupt = False
 
     def reset_init_passcode_entry(self):
         """
@@ -76,7 +78,7 @@ class KPC:
         Calls for a LED "power up" display.
         """
         self.cumulative_password = ""
-        self.power_up_animation()
+        self.__power_up_animation()
 
     def reset_passcode_entry(self):
         """
@@ -100,10 +102,10 @@ class KPC:
         """
         if self.current_password == self.cumulative_password:
             self.override_signal = "Y"
-            self.twinkle_leds()
+            self.__twinkle_leds()
         else:
             self.override_signal = "0"
-            self.flash_leds()
+            self.__flash_leds()
 
     def reset_agent(self):
         """
@@ -115,7 +117,7 @@ class KPC:
         self.chosen_time = ""
         self.chosen_led = None
         self.override_signal = None
-        self.power_down_animation()
+        self.__power_down_animation()
 
     def fully_activate_agent(self):
         """
@@ -135,7 +137,11 @@ class KPC:
         Caches cumulative_password as old_password.
         Is used for confirmation of password change.
         """
-        self.old_cumulative_password = self.cumulative_password
+        if len(self.cumulative_password) >= 4:
+            self.old_cumulative_password = self.cumulative_password
+        else:
+            self.override_signal = 'N'
+            self.__power_down_animation()
         self.cumulative_password = ""
 
     def write_password_to_file(self):
@@ -160,32 +166,33 @@ class KPC:
         are the same. If they are, the input password
         is written to file.
         """
-        if self.old_cumulative_password == self.cumulative_password:
+        if (self.old_cumulative_password == self.cumulative_password) and \
+                (len(self.cumulative_password) >= 4):
             self.write_password_to_file()
             self.cumulative_password = ""
             self.old_cumulative_password = ""
             self.read_password_from_file()
-            self.twinkle_leds()
+            self.__twinkle_leds()
         else:
-            self.flash_leds()
+            self.__flash_leds()
 
-    def light_one_led(self, led_nr, sec):
+    def __light_one_led(self, led_nr, sec):
         """ Lights chosen led for given number of seconds """
         self.led_board.light_led_for_time(led_nr, sec)
 
-    def flash_leds(self):
+    def __flash_leds(self):
         """ Flashes all LEDs thrice """
         self.led_board.flash_all_leds_multiple_times(3)
 
-    def twinkle_leds(self):
+    def __twinkle_leds(self):
         """ Twinkles LEDs left to right """
         self.led_board.twinkle_all_leds()
 
-    def power_up_animation(self):
+    def __power_up_animation(self):
         """ Displays power-up animation """
         self.led_board.twinkle_leds_from_centre()
 
-    def power_down_animation(self):
+    def __power_down_animation(self):
         """ Displays power-down animation """
         self.led_board.twinkle_leds_from_edges()
 
@@ -207,7 +214,7 @@ class KPC:
         Activates the LED chosen by the user
         for user defined amount of time
         """
-        self.light_one_led(self.chosen_led, int(self.chosen_time))
+        self.__light_one_led(self.chosen_led, int(self.chosen_time))
 
     def reset_led(self):
         """ Resets selection of LED by user """
