@@ -4,10 +4,6 @@ def signal_is_digit(signal):
 
 def signal_is_star(signal):
     return ord(signal) == 42
-# def signal_is_star(signal):
-#     # Sjekker om bokstaven er en u
-#     return ord(signal) == 117
-
 
 def signal_is_Y(signal):
     return ord(signal) == 89 or ord(signal) == 121

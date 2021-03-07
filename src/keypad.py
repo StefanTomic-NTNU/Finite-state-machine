@@ -6,8 +6,8 @@ import time
 
 #TODO implement CTRL + C somewhere and clear all the leds etc.... 
 
-def on_release(key):
-    return False
+#def on_release(key):
+#    return False
 
 
 class Keypad:

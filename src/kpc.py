@@ -1,9 +1,9 @@
 """ File contains the KPC class """
 import GPIOSimulator_v5 as GPIOSimulator
 from fsm import FSM
-from src.charlieplexer import Charlieplexer
-from src.keypad import Keypad
-from src.led_board import LED_board
+from charlieplexer import Charlieplexer
+from keypad import Keypad
+from led_board import LED_board
 
 
 class KPC:
@@ -33,13 +33,18 @@ class KPC:
         Calls for the Keypad to poll for input,
         and changes the signal of the FSM accordingly
         """
-        while True:
-            if self.override_signal is None:
-                self.fsm.signal = self.keypad.get_next_signal()
-            else:
-                self.fsm.signal = self.override_signal
-            self.fsm.check_all_rules()
-            print(self.fsm.state)
+        condition = True
+        try:
+            while condition:
+                if self.override_signal is None:
+                    self.fsm.signal = self.keypad.get_next_signal()
+                else:
+                    self.fsm.signal = self.override_signal
+                self.fsm.check_all_rules()
+                print(self.fsm.state)
+        except KeyboardInterrupt:
+            print("quitting...")
+            condition = False
 
     def reset_init_passcode_entry(self):
         self.cumulative_password = ""

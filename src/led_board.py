@@ -1,5 +1,5 @@
-from src.charlieplexer import Charlieplexer
-from src.utils import signal_is_digit_0_to_5
+from charlieplexer import Charlieplexer
+from utils import signal_is_digit_0_to_5
 from datetime import datetime, timedelta
 import time
 
